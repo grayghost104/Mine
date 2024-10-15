@@ -12,18 +12,41 @@ class Color(db.Model, SerializerMixin):
     __tablename__ = 'colors' 
     id = db.Column (db.Integer, primary_key=True) 
     blanket = db.Column(db.String)
+    food = db.Column(db.String)
+    clothes = db.Column(db.String)
+    towels = db.Column(db.String)
+    glass_things = db.Column(db.String)
+    cutlery = db.Column(db.String)
+    drinks = db.Column(db.String)
+    phone_accessories = db.Column(db.String)
+    accessories = db.Column(db.String)
+    candles = db.Column(db.String)
+    stationary = db.Column(db.String)
+    cosmetics_fragrances = db.Column(db.String)
+    toiletries = db.Column(db.String)
+    blind_bags = db.Column(db.String)
+    bags_backpacks = db.Column(db.String)
+    jewelry = db.Column(db.String)
     user_id = db.Column(db.Integer,db.ForeignKey("users.id"))
     user = db.relationship("User", back_populates="colors")
 
 class Dream(db.Model, SerializerMixin): 
     __tablename__ = 'dreams' 
     id = db.Column (db.Integer, primary_key=True) 
+    things = db.Column(db.String)
+    places = db.Column(db.String)
+    states_coutries = db.Column(db.String)
     user_id = db.Column(db.Integer,db.ForeignKey("users.id"))
     user = db.relationship("User", back_populates="dreams")
 
 class Birthday_thing(db.Model, SerializerMixin): 
     __tablename__ = 'birthday_things' 
     id = db.Column (db.Integer, primary_key=True) 
+    foods = db.Column(db.String)
+    drinks = db.Column(db.String)
+    beauty = db.Column(db.String)
+    clothing_stores = db.Column(db.String)
+    miscellaneous = db.Column(db.String)
     user = db.relationship("User", back_populates="birthday_things")
     user_id = db.Column(db.Integer,db.ForeignKey("users.id"))
 
@@ -40,7 +63,7 @@ class Wishlist(db.Model, SerializerMixin):
 
 class Birthday_list(db.Model, SerializerMixin): 
     __tablename__ = 'birthday_lists' 
-    id = db.Column (db.Integer, primary_key=True) 
+    id = db.Column (db.Integer, primary_key=True)
     wishlists = db.relationship("Wishlist", back_populates="birthday_lists", cascade ="all, delete-orphan")
 
 
@@ -52,12 +75,22 @@ class Holiday_list(db.Model, SerializerMixin):
 class User(db.Model, SerializerMixin):
     __tablename__= 'users' 
     id=db.Column (db.Integer, primary_key=True)
+    email = db.Column(db.String, unique=True, nullable=False)
     username= db.Column(db.String, nullable=False, unique=True)
     _password_hash = db.Column(db.String)
     colors = db.relationship("Color", back_populates="user")
     birthday = db.relationship("Birthday", back_populates="user")
     dreams = db.relationship("Dream", back_populates="user")
     wishlists = db.relationship("wishlist", back_populates="users", cascade ="all, delete-orphan")
+    
+    
+    
+    @validates('email')
+    def validate_image(self, key, email):
+        if "@" in email:
+            return email
+        else:
+            raise ValueError('invalid email')
 
     @hybrid_property
     def password_hash(self):
