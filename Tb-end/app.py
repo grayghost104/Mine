@@ -3,7 +3,7 @@ from flask_restful import Resource, Api
 from config import app, db, api, mail
 from models import User
 from flask_mail import Message
-from models import User, Dream, Birthday_thing, Wishlist, Color, Holiday_list, Birthday_list
+from models import User, Dream, Birthday_thing, Color
 
 class LogOUT(Resource):
     def delete(self):
